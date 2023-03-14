@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.Navigation
-import org.w3c.dom.Text
+import com.google.android.material.textfield.TextInputEditText
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,19 +33,36 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val txtTurn = view.findViewById<TextView>(R.id.txtTurn)
-        val txtScoreAkhir = view.findViewById<TextView>(R.id.txtScoreAkhir)
+        val txtNumber = view.findViewById<TextView>(R.id.txtRandomNumber)
+        val btnSubmit = view.findViewById<Button>(R.id.btnSubmit)
+        val txtJawaban = view.findViewById<TextInputEditText>(R.id.txtJawaban)
+
+        var number1 = (0..100).random()
+        var number2 = (0..100).random()
+        var jumlah = number1+number2
+        var score = 0
+        txtNumber.text = number1.toString() + " + " + number2.toString()
 
         if (arguments != null) {
             val playerName = GameFragmentArgs.fromBundle(requireArguments()).playerName
-            val score = GameFragmentArgs.fromBundle(requireArguments()).scorePlayer
             txtTurn.text = "$playerName"
-            txtScoreAkhir.text = "$score"
         }
 
-        val btnBack = view.findViewById<Button>(R.id.btnBack)
-        btnBack.setOnClickListener {
-            val action = GameFragmentDirections.actionMainFragment()
-            Navigation.findNavController(it).navigate(action)
+        btnSubmit.setOnClickListener {
+            if (txtJawaban.text.toString() != "") {
+                val jawaban = Integer.parseInt(txtJawaban.text.toString())
+
+                if (jumlah == jawaban) {
+                    number1 = (0..100).random()
+                    number2 = (0..100).random()
+                    jumlah = number1+number2
+                    txtNumber.text = number1.toString() + " + " + number2.toString()
+                    score = score + 1
+                } else {
+                    val action = GameFragmentDirections.actionResultFragment(score.toString())
+                    Navigation.findNavController(it).navigate(action)
+                }
+            }
         }
     }
 

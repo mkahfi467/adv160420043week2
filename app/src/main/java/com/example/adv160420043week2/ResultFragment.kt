@@ -6,36 +6,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.navigation.Navigation
-import com.google.android.material.textfield.TextInputEditText
 
 /**
  * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
+ * Use the [ResultFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MainFragment : Fragment() {
+class ResultFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        return inflater.inflate(R.layout.fragment_result, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // DECLARATION OBJECT
-        val btnStart = view.findViewById<Button>(R.id.btnStart)
-        val txtName = view.findViewById<TextInputEditText>(R.id.txtName)
+        val txtScore = view.findViewById<TextView>(R.id.txtScore)
+        val btnBack = view.findViewById<Button>(R.id.btnBack)
 
-        btnStart.setOnClickListener {
-            val namaPemain = txtName.text.toString()
-            val action = MainFragmentDirections.actionGameFragment(namaPemain)
+        if (arguments != null) {
+            val score = ResultFragmentArgs.fromBundle(requireArguments()).score
+            txtScore.text = "Your score is $score"
+        }
+
+        btnBack.setOnClickListener {
+            val action = ResultFragmentDirections.actionMainFragment()
             Navigation.findNavController(it).navigate(action)
         }
     }
-
 }
